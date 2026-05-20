@@ -3,335 +3,894 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DevOps Portfolio | Automated Deployment</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <title>Ashu Kumari | DevOps & Cloud Engineer Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --accent: #00e5ff;
-      --accent2: #ff6b35;
-      --text: #e8e8f0;
-      --muted: #6b6b80;
-      --border: #1e1e2e;
+      --bg: #030305;
+      --surface: rgba(15, 15, 25, 0.6);
+      --surface-hover: rgba(25, 25, 45, 0.8);
+      --accent-cyan: #00f0ff;
+      --accent-purple: #bd00ff;
+      --accent-orange: #ff5e00;
+      --text-main: #f5f5fa;
+      --text-muted: #8b8baf;
+      --border: rgba(255, 255, 255, 0.05);
+      --border-active: rgba(0, 240, 255, 0.3);
+      --glow-cyan: rgba(0, 240, 255, 0.15);
+      --glow-purple: rgba(189, 0, 255, 0.15);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
     body {
       background: var(--bg);
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
-    /* Grid background */
+
+    /* Ambient Glow Backgrounds */
+    .ambient-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(150px);
+      z-index: 0;
+      opacity: 0.3;
+    }
+    .glow-1 {
+      top: -100px;
+      right: -100px;
+      background: var(--accent-cyan);
+    }
+    .glow-2 {
+      top: 50%;
+      left: -200px;
+      background: var(--accent-purple);
+    }
+    .glow-3 {
+      bottom: -100px;
+      right: 10% auto;
+      background: var(--accent-orange);
+    }
+
+    /* Cyber Grid */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px);
+      background-size: 50px 50px;
       pointer-events: none;
-      z-index: 0;
-    }
-    nav {
-      position: sticky; top: 0;
-      background: rgba(10,10,15,0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
-      display: flex; justify-content: space-between; align-items: center;
-      z-index: 100;
-    }
-    .logo {
-      font-family: 'Space Mono', monospace;
-      font-size: 1rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-    }
-    .logo span { color: var(--accent2); }
-    .status-badge {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      color: #4ade80;
-    }
-    .status-badge::before {
-      content: '';
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 8px #4ade80;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
-    }
-    .hero {
-      position: relative;
-      padding: 6rem 2rem 4rem;
-      max-width: 900px;
-      margin: 0 auto;
       z-index: 1;
     }
-    .tag {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 0.3rem 0.8rem;
-      border-radius: 2px;
-      letter-spacing: 0.15em;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-    }
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      margin-bottom: 1.5rem;
-    }
-    h1 em {
-      font-style: normal;
-      color: var(--accent);
-      position: relative;
-    }
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--muted);
-      max-width: 560px;
-      line-height: 1.7;
-      margin-bottom: 2.5rem;
-    }
-    .cta-row {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-    }
-    .btn {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
-      padding: 0.85rem 1.8rem;
-      border-radius: 3px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      letter-spacing: 0.05em;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-    }
-    .btn-primary:hover { background: #fff; transform: translateY(-2px); }
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Pipeline section */
-    .pipeline {
-      position: relative; z-index: 1;
-      padding: 4rem 2rem;
-      max-width: 900px;
-      margin: 0 auto;
+    /* Glass Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(3, 3, 5, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
     }
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-    }
-    .pipeline-track {
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 0;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-    }
-    .pipeline-step {
-      flex-shrink: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1.2rem 1.5rem;
-      min-width: 140px;
-      position: relative;
-      animation: fadeUp 0.5s ease both;
-    }
-    .pipeline-step:nth-child(1) { animation-delay: 0.1s; }
-    .pipeline-step:nth-child(3) { animation-delay: 0.2s; }
-    .pipeline-step:nth-child(5) { animation-delay: 0.3s; }
-    .pipeline-step:nth-child(7) { animation-delay: 0.4s; }
-    .pipeline-step:nth-child(9) { animation-delay: 0.5s; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .step-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .step-name {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    .step-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 0.3rem;
-      line-height: 1.4;
-    }
-    .arrow {
-      color: var(--accent2);
-      font-size: 1.2rem;
-      padding: 0 0.3rem;
-      flex-shrink: 0;
+      gap: 0.3rem;
+      text-decoration: none;
     }
 
-    /* Tech stack */
-    .stack {
-      position: relative; z-index: 1;
-      padding: 3rem 2rem 6rem;
-      max-width: 900px;
-      margin: 0 auto;
+    .logo span {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .stack-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      list-style: none;
     }
-    .stack-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1.2rem;
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.1); }
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      padding: 10rem 10% 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      color: var(--accent-cyan);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1.2rem;
       border-radius: 4px;
-      transition: border-color 0.2s, transform 0.2s;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      width: fit-content;
     }
-    .stack-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-3px);
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
     }
-    .stack-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
-    .stack-name {
+
+    .hero h1 span.gradient {
+      background: linear-gradient(to right, var(--accent-cyan) 20%, var(--accent-purple) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero h1 span.author-name {
+      text-decoration: underline;
+      text-decoration-color: var(--accent-cyan);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--text-muted);
+      max-width: 650px;
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: 3rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      text-decoration: none;
       font-weight: 700;
       font-size: 0.9rem;
-      margin-bottom: 0.2rem;
+      padding: 1rem 2.2rem;
+      border-radius: 4px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
     }
-    .stack-role {
+
+    .btn-primary {
+      background: var(--accent-cyan);
+      color: #030305;
+      box-shadow: 0 4px 20px rgba(0, 240, 255, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    /* Pipeline Section */
+    .pipeline-section {
+      padding: 8rem 10%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-header {
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
       font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
+      font-size: 0.8rem;
+      color: var(--accent-purple);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      margin-bottom: 0.8rem;
+      display: block;
     }
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 2rem;
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+    }
+
+    .pipeline-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    /* Pipeline Line Connector */
+    .pipeline-connector {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      right: 5%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+
+    .pipeline-progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple));
+      transform: scaleX(1);
+      transform-origin: left;
+      animation: fillProgress 15s linear infinite;
+    }
+
+    @keyframes fillProgress {
+      0% { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
+    }
+
+    .pipeline-card {
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      border-radius: 8px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
+    }
+
+    .pipeline-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-8px);
+      background: var(--surface-hover);
+      box-shadow: 0 10px 30px var(--glow-cyan);
+    }
+
+    .pipeline-num {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .pipeline-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      transition: all 0.4s ease;
+    }
+
+    .pipeline-card:hover .pipeline-icon {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.05);
+      color: var(--accent-cyan);
+    }
+
+    .pipeline-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .pipeline-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Skills Grid */
+    .skills-section {
+      padding: 8rem 10%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      border-radius: 8px;
+      transition: all 0.4s ease;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent-purple);
+      box-shadow: 0 10px 30px var(--glow-purple);
+      transform: translateY(-4px);
+    }
+
+    .skill-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .skill-card h3 span.icon {
+      font-size: 1.6rem;
+    }
+
+    .skill-item {
+      margin-bottom: 1.2rem;
+    }
+
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .skill-name {
+      color: var(--text-main);
+    }
+
+    .skill-val {
+      color: var(--accent-cyan);
+    }
+
+    .skill-bar-bg {
+      background: rgba(255, 255, 255, 0.05);
+      height: 4px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple));
+      border-radius: 10px;
+    }
+
+    /* Projects Section */
+    .projects-section {
+      padding: 8rem 10%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 15px 30px var(--glow-cyan);
+      transform: translateY(-6px);
+    }
+
+    .project-body {
+      padding: 2rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-tech {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .tech-tag {
       font-family: 'Space Mono', monospace;
       font-size: 0.7rem;
-      color: var(--muted);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
     }
-    footer span { color: var(--accent); }
+
+    .project-card:hover .tech-tag {
+      color: var(--accent-cyan);
+      border-color: rgba(0, 240, 255, 0.2);
+    }
+
+    .project-body h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .project-body p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-link {
+      margin-top: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: gap 0.2s ease;
+    }
+
+    .project-link:hover {
+      gap: 0.8rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      background: rgba(3, 3, 5, 0.9);
+      padding: 3rem 10%;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .footer-logo span {
+      color: var(--accent-cyan);
+    }
+
+    .footer-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-credit {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.04);
+      border: 1px solid rgba(0, 240, 255, 0.1);
+      padding: 0.4rem 1.2rem;
+      border-radius: 100px;
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .pipeline-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .pipeline-connector {
+        display: none;
+      }
+      .pipeline-card {
+        padding: 2.5rem 2rem;
+        align-items: flex-start;
+        text-align: left;
+      }
+      .pipeline-icon {
+        margin-bottom: 1rem;
+      }
+      nav {
+        padding: 1.2rem 5%;
+      }
+      .hero {
+        padding: 10rem 5% 4rem;
+      }
+      .pipeline-section, .skills-section, .projects-section {
+        padding: 6rem 5%;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Ambient Background Gradients -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Navigation Bar -->
   <nav>
-    <div class="logo">ashu<span>/</span>portfolio</div>
-    <div class="status-badge">DEPLOYED &amp; LIVE</div>
+    <a href="#" class="logo">ashu<span>/</span>devops</a>
+    <ul class="nav-links">
+      <li><a href="#pipeline">Deployment Flow</a></li>
+      <li><a href="#skills">Tech Stack</a></li>
+      <li><a href="#projects">Projects</a></li>
+    </ul>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      DEPLOYED & LIVE
+    </div>
   </nav>
 
+  <!-- Hero Section -->
   <section class="hero">
-    <div class="tag">✦ Automated CI/CD Deployment</div>
-    <h1>Ship Code.<br/>Deploy <em>Automatically.</em><br/>Ship Faster.</h1>
-    <p class="subtitle">
-      A fully automated DevOps pipeline — code pushed to GitHub triggers Jenkins,
-      which builds, tests, and deploys directly to AWS EC2. Zero manual steps.
+    <div class="hero-tag">⚡ Automated Infrastructure & CI/CD</div>
+    <h1>Building robust pipelines.<br/>Deploying <span class="gradient">automatically.</span></h1>
+    <p class="hero-subtitle">
+      Hi, I'm <span class="author-name">Ashu Kumari</span>. I engineer high-availability cloud setups, automated build servers, and sleek developer experiences with zero friction.
     </p>
     <div class="cta-row">
-      <a href="https://github.com" class="btn btn-primary" target="_blank">View GitHub Repo</a>
-      <a href="#pipeline" class="btn btn-outline">See Pipeline ↓</a>
+      <a href="https://github.com/inaraartemis/Portfolio-update" target="_blank" class="btn btn-primary">
+        View GitHub Repo
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      </a>
+      <a href="#pipeline" class="btn btn-secondary">See DevOps Flow ↓</a>
     </div>
   </section>
 
-  <section class="pipeline" id="pipeline">
-    <div class="section-label">// CI/CD Pipeline Flow</div>
-    <div class="pipeline-track">
-      <div class="pipeline-step">
-        <div class="step-icon">👨‍💻</div>
-        <div class="step-name">Code Push</div>
-        <div class="step-desc">Developer pushes to GitHub main branch</div>
-      </div>
-      <div class="arrow">→</div>
-      <div class="pipeline-step">
-        <div class="step-icon">🔔</div>
-        <div class="step-name">Webhook</div>
-        <div class="step-desc">GitHub triggers Jenkins via webhook</div>
-      </div>
-      <div class="arrow">→</div>
-      <div class="pipeline-step">
-        <div class="step-icon">🔨</div>
-        <div class="step-name">Build</div>
-        <div class="step-desc">Jenkins pulls code & installs dependencies</div>
-      </div>
-      <div class="arrow">→</div>
-      <div class="pipeline-step">
-        <div class="step-icon">🧪</div>
-        <div class="step-name">Test</div>
-        <div class="step-desc">Automated tests run & pass</div>
-      </div>
-      <div class="arrow">→</div>
-      <div class="pipeline-step">
-        <div class="step-icon">🚀</div>
-        <div class="step-name">Deploy</div>
-        <div class="step-desc">App deployed live on AWS EC2</div>
-      </div>
+  <!-- Pipeline Section (Core DevOps Final Project implementation) -->
+  <section class="pipeline-section" id="pipeline">
+    <div class="section-header">
+      <span class="section-tag">// DevOps Final Project</span>
+      <h2 class="section-title">Automated CI/CD Pipeline Flow</h2>
     </div>
-  </section>
 
-  <section class="stack">
-    <div class="section-label">// Tech Stack</div>
-    <div class="stack-grid">
-      <div class="stack-card">
-        <div class="stack-icon">🐙</div>
-        <div class="stack-name">GitHub</div>
-        <div class="stack-role">Version Control</div>
+    <div class="pipeline-container">
+      <div class="pipeline-connector">
+        <div class="pipeline-progress-bar"></div>
       </div>
-      <div class="stack-card">
-        <div class="stack-icon">⚙️</div>
-        <div class="stack-name">Jenkins</div>
-        <div class="stack-role">CI/CD Automation</div>
+
+      <!-- Step 1 -->
+      <div class="pipeline-card">
+        <span class="pipeline-num">01 / STAGE</span>
+        <div class="pipeline-icon">👨‍💻</div>
+        <h3>Code Push</h3>
+        <p>Developer pushes code to the GitHub <code>main</code> branch.</p>
       </div>
-      <div class="stack-card">
-        <div class="stack-icon">☁️</div>
-        <div class="stack-name">AWS EC2</div>
-        <div class="stack-role">Cloud Server</div>
+
+      <!-- Step 2 -->
+      <div class="pipeline-card">
+        <span class="pipeline-num">02 / TRIGGER</span>
+        <div class="pipeline-icon">🔔</div>
+        <h3>Webhook</h3>
+        <p>GitHub fires a Webhook to notify Jenkins instantly.</p>
       </div>
-      <div class="stack-card">
-        <div class="stack-icon">🔒</div>
-        <div class="stack-name">IAM</div>
-        <div class="stack-role">Security & Access</div>
+
+      <!-- Step 3 -->
+      <div class="pipeline-card">
+        <span class="pipeline-num">03 / BUILD</span>
+        <div class="pipeline-icon">🔨</div>
+        <h3>Build Job</h3>
+        <p>Jenkins pulls latest code and initializes build process.</p>
       </div>
-      <div class="stack-card">
-        <div class="stack-icon">🌐</div>
-        <div class="stack-name">Nginx</div>
-        <div class="stack-role">Web Server</div>
+
+      <!-- Step 4 -->
+      <div class="pipeline-card">
+        <span class="pipeline-num">04 / TEST</span>
+        <div class="pipeline-icon">🧪</div>
+        <h3>Test Automation</h3>
+        <p>Automated tests verify structure and asset integrity.</p>
       </div>
-      <div class="stack-card">
-        <div class="stack-icon">🐧</div>
-        <div class="stack-name">Ubuntu</div>
-        <div class="stack-role">OS (t2.micro)</div>
+
+      <!-- Step 5 -->
+      <div class="pipeline-card">
+        <span class="pipeline-num">05 / DEPLOY</span>
+        <div class="pipeline-icon">🚀</div>
+        <h3>Nginx Deploy</h3>
+        <p>Code is live on AWS EC2 at the web server directory.</p>
       </div>
     </div>
   </section>
 
+  <!-- Skills Section -->
+  <section class="skills-section" id="skills">
+    <div class="section-header">
+      <span class="section-tag">// Engineering Expertise</span>
+      <h2 class="section-title">Technology & Skills</h2>
+    </div>
+
+    <div class="skills-grid">
+      <!-- Card 1: DevOps -->
+      <div class="skill-card">
+        <h3><span>DevOps & Automation</span> <span class="icon">⚙️</span></h3>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Jenkins (Pipelines-as-Code)</span>
+            <span class="skill-val">90%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Docker Containers</span>
+            <span class="skill-val">80%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 80%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Git & Version Control</span>
+            <span class="skill-val">95%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 95%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Card 2: Cloud -->
+      <div class="skill-card">
+        <h3><span>Cloud & Networking</span> <span class="icon">☁️</span></h3>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">AWS Services (EC2, VPC, IAM)</span>
+            <span class="skill-val">85%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Nginx Web Server</span>
+            <span class="skill-val">80%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 80%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Ubuntu Admin</span>
+            <span class="skill-val">75%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 75%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Card 3: Frontend -->
+      <div class="skill-card">
+        <h3><span>Frontend & UX</span> <span class="icon">🌐</span></h3>
+        <div class="skill-item">
+          <div class="skill-item">
+            <div class="skill-info">
+              <span class="skill-name">HTML5 / Semantic CSS</span>
+              <span class="skill-val">90%</span>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+          </div>
+          <div class="skill-info">
+            <span class="skill-name">Responsive Design</span>
+            <span class="skill-val">85%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">JavaScript & UI Animation</span>
+            <span class="skill-val">80%</span>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 80%;"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="projects-section" id="projects">
+    <div class="section-header">
+      <span class="section-tag">// Showcase</span>
+      <h2 class="section-title">Featured Engineering Work</h2>
+    </div>
+
+    <div class="projects-grid">
+      <!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-body">
+          <div class="project-tech">
+            <span class="tech-tag">Jenkins</span>
+            <span class="tech-tag">AWS EC2</span>
+            <span class="tech-tag">GitHub Webhooks</span>
+          </div>
+          <h3>Automated AWS Nginx Deployment</h3>
+          <p>
+            An end-to-end automated system where code changes are verified using a Jenkinsfile test suite and deployed instantly to an Nginx server on EC2.
+          </p>
+          <a href="https://github.com/inaraartemis/Portfolio-update" class="project-link" target="_blank">
+            View Source
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card">
+        <div class="project-body">
+          <div class="project-tech">
+            <span class="tech-tag">AWS VPC</span>
+            <span class="tech-tag">IAM Security</span>
+            <span class="tech-tag">Terraform</span>
+          </div>
+          <h3>Secure Cloud VPC Infrastructure</h3>
+          <p>
+            Custom AWS Virtual Private Cloud configuration with isolated public and private subnets, security group firewall filtering, and restricted IAM user permissions.
+          </p>
+          <a href="#" class="project-link">
+            Case Study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card">
+        <div class="project-body">
+          <div class="project-tech">
+            <span class="tech-tag">Docker</span>
+            <span class="tech-tag">Linux</span>
+            <span class="tech-tag">Bash Scripting</span>
+          </div>
+          <h3>Server Provisioning Shell Automations</h3>
+          <p>
+            Zero-touch server bootstrap script configured to automatically patch Ubuntu OS, install JDK dependencies, establish firewall limits, and launch Docker runtimes.
+          </p>
+          <a href="#" class="project-link">
+            View Source
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
-    Deployed via <span>Jenkins CI/CD</span> on <span>AWS EC2</span> · Auto-triggered from GitHub
+    <div class="footer-content">
+      <a href="#" class="footer-logo">ashu<span>/</span>devops</a>
+      <p class="footer-text">© 2026 Ashu Kumari. Built for AWS + Jenkins automation presentation.</p>
+      <div class="footer-credit">
+        ⚡ CI/CD PIPELINE LIVE & ACTIVE · DEPLOYED ON AWS EC2 VIA JENKINS
+      </div>
+    </div>
   </footer>
+
 </body>
 </html>
