@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Secrets — NEVER commit these
+*.pem
+*.key
+.env
+secrets/
+
+# Screenshots folder (add your own)
+screenshots/
