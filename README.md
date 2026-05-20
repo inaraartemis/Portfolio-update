@@ -179,6 +179,6 @@ Watch Jenkins automatically build and deploy! 🎉
 
 ## 👤 Author
 
-**Arpita Mahapatra**  
+**Ashu Kumari**  
 DevOps Course — Final Project  
 [Your College Name]
