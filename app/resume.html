@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashu Kumari - Resume Viewer</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=5.0">
+    <style>
+        body {
+            background-color: #0f172a; /* matches deep dark theme */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .resume-viewer-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .resume-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        .resume-image-wrapper {
+            width: 100%;
+            background: white; /* white background for classic resume paper contrast */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem; /* Add padding to make the image breathe and look high quality */
+            display: flex;
+            justify-content: center;
+        }
+
+        .resume-image-wrapper img {
+            width: 100%;
+            height: auto;
+            max-width: 800px; /* ensuring it doesn't stretch weirdly */
+            object-fit: contain;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow on the document itself */
+        }
+
+        /* Float the download button on mobile or make it prominent */
+        @media (max-width: 768px) {
+            .resume-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            .resume-image-wrapper {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Background Elements -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    <div class="bg-stars"></div>
+
+    <div class="resume-viewer-container">
+        
+        <!-- Controls Header -->
+        <header class="resume-header">
+            <a href="index.html" class="back-link">
+                <i data-lucide="arrow-left"></i> Back to Portfolio
+            </a>
+            
+            <a href="Ashu_12316634.pdf" download="Ashu_Kumari_Resume.pdf" class="btn primary-btn">
+                Download CV <i data-lucide="download"></i>
+            </a>
+        </header>
+
+        <!-- High Quality Document Viewer -->
+        <div class="resume-image-wrapper scroll-reveal" style="opacity: 1; transform: none; padding: 0; border: none; background: transparent;">
+            <iframe src="Ashu_12316634.pdf" type="application/pdf" width="100%" height="800px" style="border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5);"></iframe>
+        </div>
+
+    </div>
+
+    <!-- Initialize icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
