@@ -10,8 +10,11 @@ This project demonstrates a **fully automated CI/CD deployment pipeline**. Every
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture & Workflow
 
+The pipeline utilizes modern cloud infrastructure and CI/CD tools to deliver a robust, highly reliable automation workflow. Below is the detailed architectural design and flow:
+
+### 1. High-Level Architecture Diagram
 ```text
 ┌─────────────────────────────────────────────────────────────┐
 │                        DEVELOPER                            │
@@ -48,9 +51,10 @@ This project demonstrates a **fully automated CI/CD deployment pipeline**. Every
 │   │   └──────────────────────────────────────────────┘  │   │
 │   │                                                     │   │
 │   │   Security Group Rules:                             │   │
-│   │   • Port 22  (SSH)   — Your IP only                 │   │
+│   │   • Port 22  (SSH)   — Admin IP only                │   │
 │   │   • Port 80  (HTTP)  — Open (0.0.0.0/0)             │   │
 │   │   • Port 8080 (Jenkins) — Open (0.0.0.0/0)          │   │
+│   │                                                     │   │
 │   └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │   IAM Role: EC2-DevOps-Role                                 │
@@ -65,19 +69,83 @@ This project demonstrates a **fully automated CI/CD deployment pipeline**. Every
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### 2. Jenkins CI/CD Pipeline Stages
+Defined declaratively as code in the [Jenkinsfile](file:///d:/personal/Projects/ASHUPRO/devops-project/Jenkinsfile), the pipeline performs the following steps in sequence:
+
+| Stage | Action | Details |
+| :--- | :--- | :--- |
+| **1. Checkout** | Source Code Pull | Jenkins clones the latest commit from the GitHub repository (`main` branch). |
+| **2. Build** | Workspace Setup | Prepares deployment workspace directories, cleans up older builds, and checks syntax. |
+| **3. Test** | Site Integrity Verification | Executes automated shell validations to verify files exist and are populated. |
+| **4. Deploy** | Production Delivery | Deploys HTML/CSS/JS/PDF assets to Nginx target `/var/www/html/` with secure ownership permissions. |
+
+### 3. AWS Infrastructure Setup
+A reliable, resilient AWS environment guarantees maximum availability of both Nginx and Jenkins:
+
+| AWS Service | Resource / Config | Purpose |
+| :--- | :--- | :--- |
+| **EC2** | `t2.micro` (Ubuntu 22.04 LTS) | Hosted instance runs Jenkins (CI/CD engine) and Nginx (production web server). |
+| **VPC & Subnet** | Public Subnet, Route Table, IGW | Provides internet routing capability to and from the hosted instance. |
+| **Security Groups** | Port 22 (SSH), Port 80 (HTTP), Port 8080 (Jenkins) | Network firewall protecting instances by controlling inbound and outbound traffic. |
+| **IAM Role** | `EC2-DevOps-Role` | Grants least-privilege administrative permissions for AWS service integrations. |
+
 ---
 
-## 🛠️ Tech Stack
+## 🌿 Version Control & Git Branching Strategy
 
-| Tool | Purpose |
-|------|---------|
-| GitHub | Source code & version control |
-| Jenkins | CI/CD automation server |
-| AWS EC2 (t2.micro) | Cloud hosting (Free Tier) |
-| AWS IAM | Security & access management |
-| AWS VPC + Security Groups | Networking |
-| Nginx | Web server |
-| Ubuntu 22.04 | Operating system |
+Our version control model represents **professional Git hygiene** and an **active pipeline integration model** to mimic production environments.
+
+### 1. Branching Strategy Diagram
+We utilize a clean branching strategy designed to prevent unauthorized updates from breaking the live production site.
+
+```text
+main ──────────────────────────────[Deploy Gate]─────────────▶ (production - triggers Live Deploy)
+  ▲                                     ▲
+  │                                     │ Pull Request (Review & Merge)
+  └─ dev ───────────────────────────────┴────────────────────▶ (staging/integration branch)
+       ▲
+       │ Branching Out
+       └─ feature/portfolio-updates ─────────────────────────▶ (individual feature development)
+```
+
+### 2. Branch Roles & Pipeline Scoping
+* **`main`**: The production-ready codebase. **Only pushes/merges to this branch trigger the Nginx live website deployment.**
+* **`dev`**: The active integration branch. Developers combine features here to run testing/QA pipelines without affecting production.
+* **`feature/*`**: Short-lived feature branches (e.g. `feature/add-about-page`). Developers work on specific tasks individually before merging into `dev`.
+
+### 3. Git Commit Conventions (Semantic Commits)
+To maintain a clear and readable history, we follow **Conventional Commits guidelines**. This ensures that anyone looking at the git history understands the context immediately:
+
+* **`feat:`** A new feature (e.g., `feat: integrate custom premium Data Scientist portfolio`).
+* **`style:`** Changes that do not affect the meaning of the code (whitespace, formatting, visual design, personalizing assets like `style: personalize portfolio under Ashu Kumari's name`).
+* **`docs:`** Documentation changes only (e.g., `docs: integrate full ASCII System Architecture Diagram into README`).
+* **`test:`** Adding missing tests or correcting existing tests (e.g., `test: trigger pipeline`).
+* **`chore:`** Updating build tasks, package manager configs, etc.
+
+*Example Commit Flow in this Repository:*
+```bash
+514c2fb docs: integrate full ASCII System Architecture Diagram into README
+7a2f386 style: add JSDoc annotations and update architecture specs
+418245f docs: add maintainer meta-comments to index.html
+11c5c0b feat: integrate custom premium Data Scientist portfolio for Ashu Kumari
+```
+
+### 4. Git Webhook CI/CD Integration
+The bridge between Version Control and AWS is configured through **GitHub Webhooks**:
+1. When a developer executes `git push origin main`, GitHub sends an asynchronous `POST` HTTP request to the Jenkins payload endpoint: `http://35.153.126.161:8080/github-webhook/`.
+2. Jenkins parses the JSON payload, detects the branch change, and immediately initiates a new pipeline execution.
+3. The build is dynamically tracked under Jenkins with the GitHub commit hash, author name (`Ashu Kumari`), and the commit message.
+
+---
+
+## 🛠️ Complete Tech Stack
+
+| Tool | Category | Purpose |
+| :--- | :--- | :--- |
+| **GitHub** | Version Control | Source code hosting and Webhook trigger engine |
+| **Jenkins** | CI/CD Platform | Automates checkout, testing, and production Nginx file delivery |
+| **Nginx** | Web Server | Ultra-fast HTTP server hosting our portfolio web files on port `80` |
+| **Ubuntu 22.04** | Operating System | Host Linux kernel environment on the AWS virtual machine |
 
 ---
 
