@@ -29,6 +29,10 @@ let charIndex = 0;
 let isDeleting = false;
 let typeSpeed = 100;
 
+/**
+ * Executes a smooth, recursive typewriter animation on the hero subtitle
+ * alternating roles based on configured arrays and deletions.
+ */
 function type() {
     const currentRole = roles[roleIndex];
     
